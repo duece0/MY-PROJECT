@@ -1,0 +1,26 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "![QuickRide Logo](https://img.shields.io/badge/QuickRide-Bus%20Booking-blue?style=for-the-badge&logo=bus&logoColor=white)",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duece0/MY-PROJECT.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/duece0/MY-PROJECT/issues"
+  },
+  "homepage": "https://github.com/duece0/MY-PROJECT#readme",
+  "dependencies": {
+    "@capacitor/android": "^7.4.2",
+    "@capacitor/cli": "^7.4.2",
+    "@capacitor/core": "^7.4.2",
+    "@capacitor/ios": "^7.4.2"
+  }
+}
