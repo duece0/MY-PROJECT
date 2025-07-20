@@ -9,6 +9,7 @@ let tickets = JSON.parse(localStorage.getItem('quickride_tickets')) || [];
 // Initialize App
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
+    registerServiceWorker();
 });
 
 function initializeApp() {
@@ -712,7 +713,117 @@ if (tickets.length === 0) {
     saveTickets();
 }
 
+// Service Worker Registration
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'activated') {
+                                showNotification('App updated! Refresh to see new features.', 'success');
+                            }
+                        });
+                    });
+                })
+                .catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+}
+
+// PWA Install Prompt
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    
+    // Show install button/banner
+    showInstallPrompt();
+});
+
+function showInstallPrompt() {
+    // Create install banner
+    const installBanner = document.createElement('div');
+    installBanner.innerHTML = `
+        <div style="
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1004;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideUp 0.3s ease-out;
+        ">
+            <div>
+                <strong>📱 Install QuickRide</strong><br>
+                <small>Get the full app experience!</small>
+            </div>
+            <div>
+                <button onclick="installApp()" style="
+                    background: white;
+                    color: #667eea;
+                    border: none;
+                    padding: 0.5rem 1rem;
+                    border-radius: 5px;
+                    margin-right: 0.5rem;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">Install</button>
+                <button onclick="dismissInstallPrompt()" style="
+                    background: transparent;
+                    color: white;
+                    border: 1px solid white;
+                    padding: 0.5rem 1rem;
+                    border-radius: 5px;
+                    cursor: pointer;
+                ">Later</button>
+            </div>
+        </div>
+    `;
+    installBanner.id = 'installBanner';
+    document.body.appendChild(installBanner);
+}
+
+function installApp() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                showNotification('QuickRide installed successfully!', 'success');
+            }
+            deferredPrompt = null;
+            dismissInstallPrompt();
+        });
+    }
+}
+
+function dismissInstallPrompt() {
+    const banner = document.getElementById('installBanner');
+    if (banner) {
+        banner.remove();
+    }
+}
+
 // Export functions for global access
 window.showSection = showSection;
 window.closeModal = closeModal;
 window.cancelTicket = cancelTicket;
+window.installApp = installApp;
+window.dismissInstallPrompt = dismissInstallPrompt;
