@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickRide - Bus Ticket Booking in Ghana</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-bus"></i>
+                <span>QuickRide</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#booking" class="nav-link">Book Ticket</a></li>
+                <li><a href="#my-tickets" class="nav-link">My Tickets</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Travel Across Ghana with Comfort</h1>
+                    <p>Book your bus tickets easily and travel with peace of mind. Fast, reliable, and affordable transportation.</p>
+                    <button class="cta-button" onclick="showSection('booking')">
+                        <i class="fas fa-ticket-alt"></i>
+                        Book Now
+                    </button>
+                </div>
+                <div class="hero-image">
+                    <i class="fas fa-bus-alt"></i>
+                </div>
+            </div>
+            
+            <!-- Features -->
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Multiple Routes</h3>
+                    <p>Travel between major cities in Ghana including Accra, Kumasi, and Tamale</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>Easy Payment</h3>
+                    <p>Pay with Mobile Money, Card, or Bank Transfer</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Safe & Secure</h3>
+                    <p>Your bookings and payments are protected</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section -->
+        <section id="booking" class="section">
+            <div class="container">
+                <h2>Book Your Ticket</h2>
+                <div class="booking-form-container">
+                    <form id="bookingForm" class="booking-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="departure">From</label>
+                                <select id="departure" required>
+                                    <option value="">Select departure city</option>
+                                    <option value="Accra">Accra</option>
+                                    <option value="Kumasi">Kumasi</option>
+                                    <option value="Tamale">Tamale</option>
+                                    <option value="Cape Coast">Cape Coast</option>
+                                    <option value="Takoradi">Takoradi</option>
+                                    <option value="Ho">Ho</option>
+                                    <option value="Sunyani">Sunyani</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="destination">To</label>
+                                <select id="destination" required>
+                                    <option value="">Select destination city</option>
+                                    <option value="Accra">Accra</option>
+                                    <option value="Kumasi">Kumasi</option>
+                                    <option value="Tamale">Tamale</option>
+                                    <option value="Cape Coast">Cape Coast</option>
+                                    <option value="Takoradi">Takoradi</option>
+                                    <option value="Ho">Ho</option>
+                                    <option value="Sunyani">Sunyani</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="date">Departure Date</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="time">Departure Time</label>
+                                <select id="time" required>
+                                    <option value="">Select time</option>
+                                    <option value="06:00">06:00 AM</option>
+                                    <option value="08:00">08:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="14:00">02:00 PM</option>
+                                    <option value="16:00">04:00 PM</option>
+                                    <option value="18:00">06:00 PM</option>
+                                    <option value="20:00">08:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="passengers">Passengers</label>
+                                <select id="passengers" required>
+                                    <option value="">Select passengers</option>
+                                    <option value="1">1 Passenger</option>
+                                    <option value="2">2 Passengers</option>
+                                    <option value="3">3 Passengers</option>
+                                    <option value="4">4 Passengers</option>
+                                    <option value="5">5 Passengers</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketType">Ticket Type</label>
+                                <select id="ticketType" required>
+                                    <option value="">Select ticket type</option>
+                                    <option value="Economy" data-price="50">Economy - GHS 50</option>
+                                    <option value="Business" data-price="80">Business - GHS 80</option>
+                                    <option value="VIP" data-price="120">VIP - GHS 120</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="price-display">
+                            <div class="price-info">
+                                <span>Total Price: </span>
+                                <span id="totalPrice">GHS 0</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-arrow-right"></i>
+                            Proceed to Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Tickets Section -->
+        <section id="my-tickets" class="section">
+            <div class="container">
+                <h2>My Tickets</h2>
+                <div class="tickets-filter">
+                    <button class="filter-btn active" data-filter="all">All Tickets</button>
+                    <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                    <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+                </div>
+                <div id="ticketsList" class="tickets-list">
+                    <!-- Tickets will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="container">
+                <h2>Contact Us</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Phone</h3>
+                                <p>+233 24 123 4567</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h3>Email</h3>
+                                <p>support@quickride.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Office</h3>
+                                <p>Accra, Ghana</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-group">
+                            <label for="contactName">Name</label>
+                            <input type="text" id="contactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Payment Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="booking-summary">
+                    <h4>Booking Summary</h4>
+                    <div id="bookingSummary"></div>
+                </div>
+                
+                <div class="payment-methods">
+                    <h4>Select Payment Method</h4>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="mobileMoney">
+                            <span class="payment-label">
+                                <i class="fas fa-mobile-alt"></i>
+                                Mobile Money
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="card">
+                            <span class="payment-label">
+                                <i class="fas fa-credit-card"></i>
+                                Credit/Debit Card
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="bank">
+                            <span class="payment-label">
+                                <i class="fas fa-university"></i>
+                                Bank Transfer
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Mobile Money Form -->
+                <div id="mobileMoneyForm" class="payment-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="mobileNetwork">Network</label>
+                        <select id="mobileNetwork" required>
+                            <option value="">Select network</option>
+                            <option value="MTN">MTN Mobile Money</option>
+                            <option value="Vodafone">Vodafone Cash</option>
+                            <option value="AirtelTigo">AirtelTigo Money</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobileNumber">Phone Number</label>
+                        <input type="tel" id="mobileNumber" placeholder="024 123 4567" required>
+                    </div>
+                </div>
+                
+                <!-- Card Form -->
+                <div id="cardForm" class="payment-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" placeholder="123" maxlength="3" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardName">Cardholder Name</label>
+                        <input type="text" id="cardName" placeholder="John Doe" required>
+                    </div>
+                </div>
+                
+                <!-- Bank Transfer Form -->
+                <div id="bankForm" class="payment-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="bankName">Bank</label>
+                        <select id="bankName" required>
+                            <option value="">Select bank</option>
+                            <option value="GCB">GCB Bank</option>
+                            <option value="Ecobank">Ecobank Ghana</option>
+                            <option value="Standard Chartered">Standard Chartered</option>
+                            <option value="Absa">Absa Bank Ghana</option>
+                            <option value="Zenith">Zenith Bank</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountNumber">Account Number</label>
+                        <input type="text" id="accountNumber" placeholder="1234567890" required>
+                    </div>
+                </div>
+                
+                <button id="processPayment" class="submit-btn payment-btn" disabled>
+                    <i class="fas fa-lock"></i>
+                    Process Payment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content success-modal">
+            <div class="modal-body">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Booking Successful!</h3>
+                <p>Your ticket has been booked successfully. You can view it in the "My Tickets" section.</p>
+                <div id="ticketDetails"></div>
+                <button class="submit-btn" onclick="closeModal('successModal')">
+                    <i class="fas fa-check"></i>
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing your booking...</p>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span class="notification-message"></span>
+        <button class="notification-close">&times;</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
