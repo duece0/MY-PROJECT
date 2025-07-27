@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickRide - Bus Pass Tickets</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/booking.css">
+    <link rel="stylesheet" href="styles/tickets.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><i class="fas fa-bus"></i><span>QuickRide</span></div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#booking" class="nav-link">Book Ticket</a></li>
+                <li><a href="#my-tickets" class="nav-link">My Tickets</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Travel Smart with QuickRide</h1>
+            <p>Book your bus tickets instantly and travel with confidence across the city</p>
+            <button class="cta-button" onclick="showSection('booking')">Book Now</button>
+        </div>
+        <div class="hero-image"><i class="fas fa-bus-alt"></i></div>
+    </section>
+
+    <section id="booking" class="booking-section" style="display: none;">
+        <div class="container">
+            <h2>Book Your Bus Ticket</h2>
+            <form id="booking-form" class="booking-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="from">From</label>
+                        <select id="from" required>
+                            <option value="">Select departure city</option>
+                            <option value="accra">Accra</option>
+                            <option value="kumasi">Kumasi</option>
+                            <option value="tamale">Tamale</option>
+                            <option value="cape-coast">Cape Coast</option>
+                            <option value="tema">Tema</option>
+                            <option value="takoradi">Takoradi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="to">To</label>
+                        <select id="to" required>
+                            <option value="">Select destination city</option>
+                            <option value="accra">Accra</option>
+                            <option value="kumasi">Kumasi</option>
+                            <option value="tamale">Tamale</option>
+                            <option value="cape-coast">Cape Coast</option>
+                            <option value="tema">Tema</option>
+                            <option value="takoradi">Takoradi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="departure-date">Departure Date</label>
+                        <input type="date" id="departure-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="departure-time">Departure Time</label>
+                        <select id="departure-time" required>
+                            <option value="">Select time</option>
+                            <option value="06:00">06:00 AM</option>
+                            <option value="08:00">08:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                            <option value="18:00">06:00 PM</option>
+                            <option value="20:00">08:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="passengers">Passengers</label>
+                        <select id="passengers" required>
+                            <option value="1">1 Passenger</option>
+                            <option value="2">2 Passengers</option>
+                            <option value="3">3 Passengers</option>
+                            <option value="4">4 Passengers</option>
+                            <option value="5">5+ Passengers</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket-type">Ticket Type</label>
+                        <select id="ticket-type" required>
+                            <option value="">Select ticket type</option>
+                            <option value="economy">Economy - GH₵25</option>
+                            <option value="business">Business - GH₵45</option>
+                            <option value="vip">VIP - GH₵65</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="travel-preference">Travel Preference</label>
+                        <select id="travel-preference" required>
+                            <option value="">Select preference</option>
+                            <option value="window">Window</option>
+                            <option value="aisle">Aisle</option>
+                            <option value="none">No Preference</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Emergency Contact Name</label>
+                        <input type="text" id="emergency-contact-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Emergency Contact Phone</label>
+                        <input type="tel" id="emergency-contact-phone" required>
+                    </div>
+                </div>
+                <div class="price-display">
+                    <div class="price-item"><span>Total Price: </span><span id="total-price">GH₵0</span></div>
+                </div>
+                <button type="submit" class="book-button"><i class="fas fa-ticket-alt"></i>Book Ticket</button>
+            </form>
+        </div>
+    </section>
+
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Payment Details</h2>
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="passenger-name">Full Name</label>
+                    <input type="text" id="passenger-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="passenger-email">Email</label>
+                    <input type="email" id="passenger-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="passenger-phone">Phone Number</label>
+                    <input type="tel" id="passenger-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="payment-method">Payment Method</label>
+                    <select id="payment-method" required>
+                        <option value="">Select payment method</option>
+                        <option value="momo">Mobile Money</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+                </div>
+                <div id="card-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" placeholder="123">
+                        </div>
+                    </div>
+                </div>
+                <div id="momo-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="momo-number">Mobile Money Number</label>
+                        <input type="tel" id="momo-number" placeholder="024xxxxxxx">
+                    </div>
+                    <div class="form-group">
+                        <label for="momo-provider">Provider</label>
+                        <select id="momo-provider">
+                            <option value="mtn">MTN Mobile Money</option>
+                            <option value="vodafone">Vodafone Cash</option>
+                            <option value="airteltigo">AirtelTigo Money</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="payment-summary">
+                    <div class="summary-item"><span>Route:</span><span id="payment-route"></span></div>
+                    <div class="summary-item"><span>Date & Time:</span><span id="payment-datetime"></span></div>
+                    <div class="summary-item"><span>Passengers:</span><span id="payment-passengers"></span></div>
+                    <div class="summary-item total"><span>Total Amount:</span><span id="payment-total"></span></div>
+                </div>
+                <button type="submit" class="pay-button"><i class="fas fa-credit-card"></i>Pay Now</button>
+            </form>
+        </div>
+    </div>
+
+    <section id="my-tickets" class="tickets-section" style="display: none;">
+        <div class="container">
+            <h2>My Tickets</h2>
+            <div class="tickets-filter">
+                <button class="filter-btn active" data-filter="all">All Tickets</button>
+                <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                <button class="filter-btn" data-filter="processing">Processing</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+            </div>
+            <div id="tickets-container" class="tickets-container"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section" style="display: none;">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <div class="contact-item"><i class="fas fa-phone"></i><span>+233 24 123 4567</span></div>
+                    <div class="contact-item"><i class="fas fa-envelope"></i><span>support@quickride.gh</span></div>
+                    <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>Tema, Greater Accra, Ghana</span></div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group"><input type="text" placeholder="Your Name" required></div>
+                    <div class="form-group"><input type="email" placeholder="Your Email" required></div>
+                    <div class="form-group"><textarea placeholder="Your Message" rows="5" required></textarea></div>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content success">
+            <span class="close">&times;</span>
+            <i class="fas fa-check-circle"></i>
+            <h2>Booking Confirmed!</h2>
+            <p>Your ticket has been booked successfully.</p>
+            <div id="ticket-details"></div>
+            <button onclick="closeModal('success-modal')" class="ok-button">OK</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"><i class="fas fa-bus"></i><span>QuickRide</span></div>
+                    <p>Your trusted partner for convenient and affordable bus travel across Ghana.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#booking">Book Ticket</a></li>
+                        <li><a href="#my-tickets">My Tickets</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2025 QuickRide. All rights reserved.</p></div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/booking.js"></script>
+    <script src="js/tickets.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+</body>
+</html>
