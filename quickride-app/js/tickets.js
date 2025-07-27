@@ -48,6 +48,22 @@ function displayTickets() {
         filteredTickets = tickets.filter(ticket => ticket.status === currentFilter);
     }
     
+    // Sort tickets by booking date (newest first) and then by passenger number
+    filteredTickets.sort((a, b) => {
+        // First sort by booking date
+        const dateComparison = new Date(b.bookingDate) - new Date(a.bookingDate);
+        if (dateComparison !== 0) return dateComparison;
+        
+        // Then sort by group booking ID
+        if (a.groupBookingId && b.groupBookingId) {
+            const groupComparison = b.groupBookingId.localeCompare(a.groupBookingId);
+            if (groupComparison !== 0) return groupComparison;
+        }
+        
+        // Finally sort by passenger number
+        return (a.passengerNumber || 0) - (b.passengerNumber || 0);
+    });
+    
     // Clear container
     container.innerHTML = '';
     
@@ -61,9 +77,22 @@ function displayTickets() {
         if (filteredTickets.length === 0) {
             showEmptyState(container);
         } else {
-            filteredTickets.forEach((ticket, index) => {
-                const ticketCard = createTicketCard(ticket, index);
-                container.appendChild(ticketCard);
+            // Group tickets by booking ID for better organization
+            const groupedTickets = groupTicketsByBooking(filteredTickets);
+            
+            Object.keys(groupedTickets).forEach((groupId, groupIndex) => {
+                const groupTickets = groupedTickets[groupId];
+                
+                // Add group header if it's a group booking
+                if (groupTickets.length > 1 && groupTickets[0].groupBookingId) {
+                    const groupHeader = createGroupHeader(groupTickets[0]);
+                    container.appendChild(groupHeader);
+                }
+                
+                groupTickets.forEach((ticket, index) => {
+                    const ticketCard = createTicketCard(ticket, index);
+                    container.appendChild(ticketCard);
+                });
             });
         }
     }, 800);
@@ -75,11 +104,30 @@ function createTicketCard(ticket, index) {
     card.className = `ticket-card ${ticket.status}`;
     card.style.animationDelay = `${index * 0.1}s`;
     
+    // Check if this is an individual ticket (has passenger number)
+    const isIndividualTicket = ticket.passengerNumber !== undefined;
+    const displayPrice = ticket.individualPrice || ticket.totalPrice;
+    
     card.innerHTML = `
         <div class="ticket-header">
-            <div class="ticket-number">${ticket.ticketNumber}</div>
+            <div class="ticket-number-section">
+                <div class="ticket-number">${ticket.ticketNumber}</div>
+                ${isIndividualTicket ? `
+                    <div class="passenger-info">
+                        <span class="passenger-label">Passenger ${ticket.passengerNumber}/${ticket.totalPassengers}</span>
+                        ${ticket.seatNumber ? `<span class="seat-number">Seat: ${ticket.seatNumber}</span>` : ''}
+                    </div>
+                ` : ''}
+            </div>
             <div class="ticket-status ${ticket.status}">${ticket.status}</div>
         </div>
+        
+        ${ticket.groupBookingId ? `
+            <div class="group-booking-info">
+                <i class="fas fa-users"></i>
+                <span>Group Booking: ${ticket.groupBookingId}</span>
+            </div>
+        ` : ''}
         
         <div class="ticket-route">
             <div class="route-location">
@@ -98,22 +146,42 @@ function createTicketCard(ticket, index) {
                 <span class="detail-label">Date & Time</span>
                 <span class="detail-value">${QuickRide.formatDate(ticket.departureDate)} at ${QuickRide.formatTime(ticket.departureTime)}</span>
             </div>
-            <div class="detail-row">
-                <span class="detail-label">Passengers</span>
-                <span class="detail-value">${ticket.passengers} passenger${ticket.passengers > 1 ? 's' : ''}</span>
-            </div>
+            ${isIndividualTicket ? `
+                <div class="detail-row">
+                    <span class="detail-label">Passenger</span>
+                    <span class="detail-value">Individual (${ticket.passengerNumber}/${ticket.totalPassengers})</span>
+                </div>
+            ` : `
+                <div class="detail-row">
+                    <span class="detail-label">Passengers</span>
+                    <span class="detail-value">${ticket.passengers} passenger${ticket.passengers > 1 ? 's' : ''}</span>
+                </div>
+            `}
             <div class="detail-row">
                 <span class="detail-label">Ticket Type</span>
                 <span class="detail-value">${capitalizeFirst(ticket.ticketType)}</span>
             </div>
+            ${ticket.seatNumber ? `
+                <div class="detail-row">
+                    <span class="detail-label">Seat Number</span>
+                    <span class="detail-value seat-highlight">${ticket.seatNumber}</span>
+                </div>
+            ` : `
+                <div class="detail-row">
+                    <span class="detail-label">Seat Preference</span>
+                    <span class="detail-value">${capitalizeFirst(ticket.travelPreference)}</span>
+                </div>
+            `}
             <div class="detail-row">
-                <span class="detail-label">Seat Preference</span>
-                <span class="detail-value">${capitalizeFirst(ticket.travelPreference)}</span>
+                <span class="detail-label">${isIndividualTicket ? 'Individual Price' : 'Total Price'}</span>
+                <span class="detail-value price">${QuickRide.formatCurrency(displayPrice)}</span>
             </div>
-            <div class="detail-row">
-                <span class="detail-label">Total Price</span>
-                <span class="detail-value price">${QuickRide.formatCurrency(ticket.totalPrice)}</span>
-            </div>
+            ${isIndividualTicket && ticket.totalBookingPrice ? `
+                <div class="detail-row">
+                    <span class="detail-label">Total Booking Price</span>
+                    <span class="detail-value total-booking-price">${QuickRide.formatCurrency(ticket.totalBookingPrice)}</span>
+                </div>
+            ` : ''}
         </div>
         
         ${ticket.status === 'upcoming' ? createQRCode(ticket.ticketNumber) : ''}
@@ -369,6 +437,44 @@ function showTicketModal(title, content) {
     }
     
     QuickRide.showModal('ticket-modal');
+}
+
+// Group tickets by booking ID
+function groupTicketsByBooking(tickets) {
+    const grouped = {};
+    
+    tickets.forEach(ticket => {
+        const groupKey = ticket.groupBookingId || ticket.id;
+        if (!grouped[groupKey]) {
+            grouped[groupKey] = [];
+        }
+        grouped[groupKey].push(ticket);
+    });
+    
+    return grouped;
+}
+
+// Create group header for multiple tickets from same booking
+function createGroupHeader(sampleTicket) {
+    const header = document.createElement('div');
+    header.className = 'group-header';
+    
+    header.innerHTML = `
+        <div class="group-header-content">
+            <div class="group-info">
+                <i class="fas fa-users"></i>
+                <div class="group-details">
+                    <strong>Group Booking: ${sampleTicket.groupBookingId}</strong>
+                    <span>${sampleTicket.totalPassengers} passengers • ${capitalizeFirst(sampleTicket.from)} → ${capitalizeFirst(sampleTicket.to)}</span>
+                </div>
+            </div>
+            <div class="group-date">
+                ${QuickRide.formatDate(sampleTicket.departureDate)} at ${QuickRide.formatTime(sampleTicket.departureTime)}
+            </div>
+        </div>
+    `;
+    
+    return header;
 }
 
 // Utility function to capitalize first letter

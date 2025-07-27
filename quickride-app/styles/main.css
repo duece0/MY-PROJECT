@@ -422,6 +422,73 @@ section h2 {
     margin-top: 2rem;
 }
 
+/* Success Modal Individual Tickets */
+.success-ticket-details h4 {
+    color: #28a745;
+    margin-bottom: 1rem;
+}
+
+.individual-tickets {
+    margin-top: 1.5rem;
+    border-top: 1px solid #e1e5e9;
+    padding-top: 1rem;
+}
+
+.individual-tickets h5 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.ticket-item {
+    background: #f8f9fa;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.ticket-item .ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.ticket-item .ticket-header strong {
+    color: #667eea;
+}
+
+.ticket-item .ticket-number {
+    font-family: 'Courier New', monospace;
+    background: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.ticket-item .ticket-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.ticket-item .ticket-info span:last-child {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.success-ticket-details .notice {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    border-radius: 4px;
+    color: #1976d2;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hamburger {

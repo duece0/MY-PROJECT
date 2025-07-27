@@ -376,6 +376,9 @@ function handleBookingSubmission(e) {
         return;
     }
     
+    // Store passenger count for individual ticket generation
+    currentBooking.individualTickets = true;
+    
     // Show payment modal
     showPaymentModal();
 }
